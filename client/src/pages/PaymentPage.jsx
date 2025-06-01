@@ -19,7 +19,7 @@ export default function PaymentPage() {
   useEffect(() => {
     if (bookingId) {
       console.log('Fetching booking details for ID:', bookingId);
-      axios.get(`http://localhost:4000/api/bookings/${bookingId}`)
+      axios.get(`https://staysmart-uxcc.onrender.com/api/bookings/${bookingId}`)
         .then(response => {
           console.log('Booking data:', response.data);
           setAmount(response.data.price); // Adjust according to actual response structure
