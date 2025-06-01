@@ -23,14 +23,14 @@ export default function IndexPage() {
     const fetchData = async () => {
       try {
         // Fetch places
-        const placesResponse = await axios.get('https://stay-smart-live-dzqc.vercel.app/api/places');
+        const placesResponse = await axios.get('https://staysmart-uxcc.onrender.com/api/places');
         setPlaces(placesResponse.data);
 
         // Fetch reminders only if user is logged in
         if (user && user._id) {
           setProfileLoading(true);
           try {
-            const remindersResponse = await axios.get(`https://stay-smart-live-dzqc.vercel.app/reminders/${user._id}`);
+            const remindersResponse = await axios.get(`https://staysmart-uxcc.onrender.com/reminders/${user._id}`);
             setReminders(remindersResponse.data);
 
             // Check if the modal should be shown
