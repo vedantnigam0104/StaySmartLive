@@ -35,7 +35,7 @@ export default function ProfilePage() {
 
   async function logout() {
     try {
-      await axios.post('https://stay-smart-live-dzqc.vercel.app/api/logout');
+      await axios.post('https://staysmart-uxcc.onrender.com/api/logout');
       sessionStorage.setItem('showReminderModal', 'false');
       sessionStorage.setItem('modalShown', 'false'); // Set a flag in session storage
       sessionStorage.clear();
