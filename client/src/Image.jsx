@@ -1,16 +1,17 @@
-export default function Image({src, ...rest}) {
-  // Check if src is not empty and does not already include 'http' or 'uploads'
-  if (src && !src.includes('http') && !src.startsWith('uploads/')) {
-    src = 'https://staysmart-uxcc.onrender.com/uploads/' + src;
+export default function Image({ src, ...rest }) {
+  if (!src) {
+    return <img {...rest} alt="Image not available" />;
   }
-  else
-  {
+
+  // If it's a relative image uploaded locally (not a full URL)
+  if (!src.includes('http') && !src.startsWith('uploads/')) {
+    src = 'https://staysmart-uxcc.onrender.com/uploads/' + src;
+  } else if (src.startsWith('uploads/')) {
     src = 'https://staysmart-uxcc.onrender.com/' + src;
   }
-
-  //console.log('Image source:', 'https://staysmart-uxcc.onrender.com/' + src); // Debugging line
+  // Else, it's a full external URL – do nothing
 
   return (
-    <img {...rest} src={src} alt={'Image not available'} />
+    <img {...rest} src={src} alt="Image not available" />
   );
 }
