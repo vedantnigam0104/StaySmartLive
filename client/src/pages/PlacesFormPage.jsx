@@ -34,7 +34,7 @@ export default function PlacesFormPage() {
     if (!id) {
       return;
     }
-    axios.get(`http://localhost:4000/api/places/${id}`).then(response => {
+    axios.get(`https://stay-smart-live-dzqc.vercel.app/api/places/${id}`).then(response => {
       const { data } = response;
       setTitle(data.title);
       setAddress(data.address);
@@ -93,13 +93,13 @@ export default function PlacesFormPage() {
     };
     if (id) {
       // update
-      await axios.put('http://localhost:4000/api/places', {
+      await axios.put('https://stay-smart-live-dzqc.vercel.app/api/places', {
         id, ...placeData
       });
       setRedirect(true);
     } else {
       // new place
-      await axios.post('http://localhost:4000/api/places', placeData);
+      await axios.post('https://stay-smart-live-dzqc.vercel.app/api/places', placeData);
       setRedirect(true);
     }
   }
