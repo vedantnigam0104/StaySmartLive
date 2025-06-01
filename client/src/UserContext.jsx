@@ -10,7 +10,7 @@ export function UserContextProvider({ children }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get('http://localhost:4000/api/profile');
+        const { data } = await axios.get('https://stay-smart-live-dzqc.vercel.app/api/profile');
         setUser(data);
       } catch (error) {
         console.error('Error fetching user profile:', error);
