@@ -79,7 +79,7 @@ export default function PaymentPage() {
         setOtpSent(true);
         setPaymentStatus('please enter the OTP sent to your email');
 
-        await axios.post('http://localhost:4000/api/finalize-booking', { bookingId });
+        await axios.post('https://staysmart-uxcc.onrender.com/api/finalize-booking', { bookingId });
       }
 
     } catch (err) {
