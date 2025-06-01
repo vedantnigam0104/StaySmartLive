@@ -37,7 +37,7 @@ console.log('Stripe Secret Key:', process.env.STRIPE_KEY);
 
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:5173',
+  origin: 'https://staysmartfront.onrender.com',
 }));
 
 
