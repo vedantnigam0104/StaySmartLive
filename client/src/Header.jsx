@@ -22,7 +22,7 @@ export default function Header() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('https://stay-smart-live-dzqc.vercel.app/api/search', {
+      const response = await axios.get('https://staysmart-uxcc.onrender.com/api/search', {
         params: {
           location: location !== 'Anywhere' ? location : undefined,
           checkIn: dates.startDate !== 'Any week' ? new Date(dates.startDate).toISOString() : undefined,
