@@ -16,7 +16,7 @@ export default function LoginPage() {
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
     try {
-      const { data } = await axios.post('https://stay-smart-live-dzqc.vercel.app/api/login', { email, password });
+      const { data } = await axios.post('https://staysmart-uxcc.onrender.com/api/login', { email, password });
       setUser(data);
       alert('Login successful');
       setRedirect(true);
@@ -41,7 +41,7 @@ export default function LoginPage() {
       };
   
       // Send user info to your backend
-      const { data } = await axios.post('https://stay-smart-live-dzqc.vercel.app/api/login', userData);
+      const { data } = await axios.post('https://staysmart-uxcc.onrender.com/api/login', userData);
       
       // Set user data in context
       setUser(data);
