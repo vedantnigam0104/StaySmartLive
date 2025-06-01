@@ -35,7 +35,7 @@ export default function BookingWidget({ place }) {
     }
 
     try {
-      const response = await axios.post('https://stay-smart-live-dzqc.vercel.app/api/bookings', {
+      const response = await axios.post('https://staysmart-uxcc.onrender.com/api/bookings', {
         checkIn, checkOut, numberOfGuests, name, phone,
         place: place._id,
         price: numberOfNights * place.price,
