@@ -6,7 +6,7 @@ import PlaceImg from "../PlaceImg";
 export default function PlacesPage() {
   const [places,setPlaces] = useState([]);
   useEffect(() => {
-    axios.get('https://stay-smart-live-dzqc.vercel.app/api/user-places').then(({data}) => {
+    axios.get('https://staysmart-uxcc.onrender.com/api/user-places').then(({data}) => {
       setPlaces(data);
     });
   }, []);
