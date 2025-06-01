@@ -39,7 +39,7 @@ export default function PaymentPage() {
     }
 
     try {
-      const paymentResponse = await axios.post('https://stay-smart-live-dzqc.vercel.app/api/create-payment-intent', {
+      const paymentResponse = await axios.post('https://staysmart-uxcc.onrender.com/api/create-payment-intent', {
         amount: amount * 100, // Amount in cents
         description: 'Hotel booking for place XYZ', // Replace with actual description
         name: user.name, // Replace with actual customer name
@@ -90,7 +90,7 @@ export default function PaymentPage() {
 
   async function verifyOtp() {
     try {
-      const response = await axios.post('https://stay-smart-live-dzqc.vercel.app/api/verify-otp', {
+      const response = await axios.post('https://staysmart-uxcc.onrender.com/api/verify-otp', {
         email: user.email, // Use the actual email of the customer
         otp,
         bookingId
