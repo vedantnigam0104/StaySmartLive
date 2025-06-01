@@ -20,7 +20,7 @@ export default function BookingsPage() {
 
   useEffect(() => {
     // Fetch bookings
-    axios.get('http://localhost:4000/api/bookings')
+    axios.get('https://stay-smart-live-dzqc.vercel.app/api/bookings')
       .then(response => {
         setBookings(response.data);
         setLoading(false);
@@ -35,7 +35,7 @@ export default function BookingsPage() {
 
     // Fetch reminders for the current user
     if (user && user._id) {
-      axios.get(`http://localhost:4000/api/reminders/${user._id}`)
+      axios.get(`https://stay-smart-live-dzqc.vercel.app/api/reminders/${user._id}`)
         .then(response => {
           setReminders(response.data);
           const reminderStatus = {};
