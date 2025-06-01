@@ -37,7 +37,7 @@ console.log('Stripe Secret Key:', process.env.STRIPE_KEY);
 
 app.use(cors({
   credentials: true,
-  origin: 'https://stay-smart-live.vercel.app/',
+  origin: 'https://stay-smart-live.vercel.app',
 }));
 
 
