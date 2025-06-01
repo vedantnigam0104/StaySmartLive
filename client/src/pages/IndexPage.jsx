@@ -30,7 +30,7 @@ export default function IndexPage() {
         if (user && user._id) {
           setProfileLoading(true);
           try {
-            const remindersResponse = await axios.get(`https://staysmart-uxcc.onrender.com/reminders/${user._id}`);
+            const remindersResponse = await axios.get(`https://staysmart-uxcc.onrender.com/api/reminders/${user._id}`);
             setReminders(remindersResponse.data);
 
             // Check if the modal should be shown
