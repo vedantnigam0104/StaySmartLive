@@ -19,7 +19,7 @@ import {loadStripe} from '@stripe/stripe-js';
 import {Elements} from '@stripe/react-stripe-js';
 import LocationPlacesPage from "./pages/LocationPlacesPage.jsx";
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://stay-smart-live-dzqc.vercel.app/';
 axios.defaults.withCredentials = true;
 
 const stripePromise = loadStripe('pk_test_51MyDjZSCrQadYtMEy5sPPkCCGqHfzcVLPG1dA0Mm6eh11v8Qxzj2YYm5wTDtYgmxhHaz2Q3u7wtEG8VV23XtO8LO00mCYd95OX'); // Replace 'your_publishable_key' with your actual publishable key
