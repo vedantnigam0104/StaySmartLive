@@ -14,7 +14,7 @@ export default function BookingPage() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`https://staysmart-uxcc.onrender.com/bookings/${id}`)
+      axios.get(`https://staysmart-uxcc.onrender.com/account/bookings/${id}`)
         .then(response => {
           setBooking(response.data);
         })
