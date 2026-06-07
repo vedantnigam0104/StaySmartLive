@@ -23,7 +23,7 @@ export default function PlacePage() {
   useEffect(() => {
     if (!id) return;
 
-    axios.get(`/api/places/${id}`)
+    axios.get(`https://stay-smart-live.vercel.app/api/places/${id}`)
       .then(response => {
         setPlace(response.data);
         console.log('Fetched place data:', response.data);
