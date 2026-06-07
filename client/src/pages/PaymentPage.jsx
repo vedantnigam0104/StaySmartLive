@@ -19,7 +19,7 @@ export default function PaymentPage() {
   useEffect(() => {
     if (bookingId) {
       console.log('Fetching booking details for ID:', bookingId);
-      axios.get(`https://staysmart-uxcc.onrender.com/api/bookings/${bookingId}`)
+      axios.get(`https://stay-smart-live.vercel.app/api/bookings/${bookingId}`)
         .then(response => {
           console.log('Booking data:', response.data);
           setAmount(response.data.price); // Adjust according to actual response structure
@@ -39,7 +39,7 @@ export default function PaymentPage() {
     }
 
     try {
-      const paymentResponse = await axios.post('https://staysmart-uxcc.onrender.com/api/create-payment-intent', {
+      const paymentResponse = await axios.post('https://stay-smart-live.vercel.app/api/create-payment-intent', {
         amount: amount * 100, // Amount in cents
         description: 'Hotel booking for place XYZ', // Replace with actual description
         name: user.name, // Replace with actual customer name
@@ -79,7 +79,7 @@ export default function PaymentPage() {
         setOtpSent(true);
         setPaymentStatus('please enter the OTP sent to your email');
 
-        await axios.post('https://staysmart-uxcc.onrender.com/api/finalize-booking', { bookingId });
+        await axios.post('https://stay-smart-live.vercel.app/api/finalize-booking', { bookingId });
       }
 
     } catch (err) {
@@ -90,7 +90,7 @@ export default function PaymentPage() {
 
   async function verifyOtp() {
     try {
-      const response = await axios.post('https://staysmart-uxcc.onrender.com/api/verify-otp', {
+      const response = await axios.post('https://stay-smart-live.vercel.app/api/verify-otp', {
         email: user.email, // Use the actual email of the customer
         otp,
         bookingId
