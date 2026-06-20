@@ -19,7 +19,7 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await axios.post('https://stay-smart-live.vercel.app/api/register', {
+      const response = await axios.post('/api/register', {
         name,
         email,
         password,
