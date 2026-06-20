@@ -6,7 +6,7 @@ export default function PhotosUploader({addedPhotos,onChange}) {
   const [photoLink,setPhotoLink] = useState('');
   async function addPhotoByLink(ev) {
     ev.preventDefault();
-    const {data:filename} = await axios.post('https://stay-smart-live.vercel.app/api/upload-by-link', {link: photoLink});
+    const {data:filename} = await axios.post('/api/upload-by-link', {link: photoLink});
     onChange(prev => {
       return [...prev, filename];
     });
@@ -18,7 +18,7 @@ export default function PhotosUploader({addedPhotos,onChange}) {
     for (let i = 0; i < files.length; i++) {
       data.append('photos', files[i]);
     }
-    axios.post('https://stay-smart-live.vercel.app/api/uploads', data, {
+    axios.post('/api/uploads', data, {
       headers: {'Content-type':'multipart/form-data'}
     }).then(response => {
       const {data:filenames} = response;
