@@ -14,7 +14,7 @@ export default function BookingPage() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`https://stay-smart-live.vercel.app/api/bookings/${id}`)
+      axios.get(`/api/bookings/${id}`)
         .then(response => {
           setBooking(response.data);
         })
@@ -27,7 +27,7 @@ export default function BookingPage() {
 
   async function handleCancelBooking() {
     try {
-      await axios.post('https://stay-smart-live.vercel.app/api/cancel-booking', { bookingId: id });
+      await axios.post('/api/cancel-booking', { bookingId: id });
       setCancellationStatus('Booking canceled successfully');
       
       // To reflect changes on the bookings page and redirect after a short delay
