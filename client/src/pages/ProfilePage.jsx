@@ -24,7 +24,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (ready && user) {
-      axios.get('https://stay-smart-live.vercel.app/api/profile')
+      axios.get('/api/profile')
         .then(response => {
           setProfile(response.data);
           setAvatarBase64(response.data.avatar); // Set the current avatar
@@ -35,7 +35,7 @@ export default function ProfilePage() {
 
   async function logout() {
     try {
-      await axios.post('https://stay-smart-live.vercel.app/api/logout');
+      await axios.post('/api/logout');
       sessionStorage.setItem('showReminderModal', 'false');
       sessionStorage.setItem('modalShown', 'false'); // Set a flag in session storage
       sessionStorage.clear();
@@ -67,7 +67,7 @@ export default function ProfilePage() {
         updatedProfile.newPassword = newPassword;
       }
 
-      await axios.put('https://stay-smart-live.vercel.app/api/profile', updatedProfile);
+      await axios.put('/api/profile', updatedProfile);
       alert('Profile updated successfully');
       setProfile(updatedProfile);
       setUser(updatedProfile);
