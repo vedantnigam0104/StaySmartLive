@@ -643,12 +643,4 @@ app.get('/api/reminders/:userId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch reminders' });
   }
 });
-
-
-
-
-
-app.listen(4000,()=>
-{
-  console.log('Server running on port 4000');
-});
+module.exports = app;
