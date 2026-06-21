@@ -40,14 +40,20 @@ console.log('Stripe Secret Key:', process.env.STRIPE_KEY);
 
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:5173',
+  origin: 'https://stay-smart-live-wtxi.vercel.app',
 }));
 
 
 
 //const PaytmChecksum = require('./PaytmChecksum');
 
-
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 async function sendOtpEmail(to, otp) {
   try {
@@ -650,10 +656,6 @@ app.get('/api/reminders/:userId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch reminders' });
   }
 });
-
-
-
-
 
 app.listen(4000,()=>
 {
