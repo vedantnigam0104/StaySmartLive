@@ -543,22 +543,73 @@ app.post('/api/verify-otp', async(req, res) => {
     res.status(400).json({ success: false, error: 'Invalid OTP' });
   }
 });
+async function sendCancellationEmail(to, booking) {
+  try {
+    const response = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to,
+      subject: 'Booking Cancellation Confirmation',
+      html: `
+        <h2>Booking Cancelled</h2>
+
+        <p>Hello ${booking.name},</p>
+
+        <p>Your booking has been successfully cancelled.</p>
+
+        <h3>Cancelled Booking Details</h3>
+
+        <ul>
+          <li><strong>Check In:</strong> ${new Date(booking.checkIn).toLocaleDateString()}</li>
+          <li><strong>Check Out:</strong> ${new Date(booking.checkOut).toLocaleDateString()}</li>
+          <li><strong>Guests:</strong> ${booking.numberOfGuests}</li>
+          <li><strong>Amount:</strong> ₹${booking.price}</li>
+        </ul>
+
+        <p>If you did not request this cancellation, please contact support immediately.</p>
+
+        <p>Thank you for using StaySmart.</p>
+      `
+    });
+
+    console.log('Cancellation email sent:', response);
+  } catch (error) {
+    console.error('Error sending cancellation email:', error);
+  }
+}
 
 app.post('/api/cancel-booking', async (req, res) => {
   try {
     const { bookingId } = req.body;
-    if (!bookingId) return res.status(400).send('Booking ID is required');
 
-    const result = await Booking.deleteOne({ _id: bookingId });
-    if (result.deletedCount === 0) return res.status(404).send('Booking not found');
+    if (!bookingId) {
+      return res.status(400).send('Booking ID is required');
+    }
+
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).send('Booking not found');
+    }
+
+    // Send cancellation email
+    try {
+      await sendCancellationEmail(
+        booking.email,
+        booking
+      );
+    } catch (emailError) {
+      console.error('Email error:', emailError);
+    }
+
+    await Booking.deleteOne({ _id: bookingId });
 
     res.send('Booking canceled successfully');
+
   } catch (error) {
     console.error('Error canceling booking:', error);
     res.status(500).send('Server error');
   }
 });
-
 // Example of an Express.js route for searching places by location
 
 
