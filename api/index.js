@@ -585,7 +585,7 @@ app.post('/api/cancel-booking', async (req, res) => {
       return res.status(400).send('Booking ID is required');
     }
 
-    const booking = await Booking.findById(bookingId);
+    const booking = await Booking.findById(bookingId).populate('place');
 
     if (!booking) {
       return res.status(404).send('Booking not found');
@@ -597,11 +597,15 @@ app.post('/api/cancel-booking', async (req, res) => {
         booking.email,
         booking
       );
-    } catch (emailError) {
-      console.error('Email error:', emailError);
+    } catch (err) {
+      console.error('Cancellation email failed:', err);
     }
 
+    // Delete booking
     await Booking.deleteOne({ _id: bookingId });
+
+    // Delete reminder linked to booking
+    await Reminder.deleteMany({ bookingId });
 
     res.send('Booking canceled successfully');
 
