@@ -20,6 +20,9 @@ const bodyParser = require('body-parser');
 //const crypto = require('crypto');
 ///const PaytmChecksum = require('paytmchecksum');
 //const uploadAvatarMiddleware = multer({ dest: 'uploads/' });
+const { Resend } = require('resend');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 
@@ -44,30 +47,30 @@ app.use(cors({
 
 //const PaytmChecksum = require('./PaytmChecksum');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+
 
 async function sendOtpEmail(to, otp) {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: to,
-    subject: 'Your OTP Code',
-    text: `Your OTP code is ${otp}.`
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
+    const response = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to,
+      subject: 'Your OTP Code',
+      html: `
+        <h2>Stay Smart OTP Verification</h2>
+        <p>Your OTP code is:</p>
+        <h1>${otp}</h1>
+        <p>Please do not share this OTP with anyone.</p>
+      `
+    });
+
+    console.log('Email sent successfully:', response);
+    return response;
+
   } catch (error) {
-    console.error('Error sending OTP email:', error);
+    console.error('Resend Error:', error);
     throw new Error('Failed to send OTP email');
   }
 }
-
 
 //const jwt = require('jsonwebtoken');
 ///const jwtSecret = process.env.JWT_SECRET; // Make sure this is correctly set in your environment
@@ -431,21 +434,25 @@ app.get('/api/bookings/:id', async (req, res) => {
     res.status(500).json({ error: 'Error fetching booking' });
   }
 });
-function sendConfirmationEmail(to, bookingDetails) {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: to,
-    subject: 'Booking Confirmation',
-    text: `Your booking was successful! Here are the details:\n\n${bookingDetails}`,
-  };
+async function sendConfirmationEmail(to, bookingDetails) {
+  try {
+    const response = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to,
+      subject: 'Booking Confirmation',
+      html: `
+        <h2>Booking Confirmed 🎉</h2>
+        <p>Your booking was successful.</p>
+        <pre>${bookingDetails}</pre>
+      `
+    });
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending email:', error);
-    } else {
-      console.log('Email sent:', info.response);
-    }
-  });
+    console.log('Confirmation email sent:', response);
+    return response;
+  } catch (error) {
+    console.error('Error sending confirmation email:', error);
+    throw error;
+  }
 }
 
 app.post('/api/finalize-booking', async (req, res) => {
@@ -529,7 +536,7 @@ app.post('/api/verify-otp', async(req, res) => {
      // Ensure this is the user’s email
 
     // Send confirmation email
-    sendConfirmationEmail(email, `Booking ID: ${booking.id}, Price: ${booking.price}`); 
+    await sendConfirmationEmail(email, `Booking ID: ${booking.id}, Price: ${booking.price}`); 
     
     res.json({ success: true });
   } else {
