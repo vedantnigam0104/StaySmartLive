@@ -631,19 +631,17 @@ app.post('/api/reminders', async (req, res) => {
 
 app.get('/api/reminders/:userId', async (req, res) => {
   const { userId } = req.params;
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
 
-  const endOfMonth = new Date(startOfMonth);
-  endOfMonth.setMonth(startOfMonth.getMonth() + 1);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   try {
     const reminders = await Reminder.find({
       userId,
-      reminderDate: { $gte: startOfMonth, $lt: endOfMonth },
+      reminderDate: { $gte: today },
       isActive: true
-    });
+    }).sort({ reminderDate: 1 });
+
     res.json(reminders);
   } catch (error) {
     console.error('Error fetching reminders:', error);
