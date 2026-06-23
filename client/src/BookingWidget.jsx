@@ -28,28 +28,42 @@ export default function BookingWidget({ place }) {
     numberOfNights = differenceInCalendarDays(new Date(checkOut), new Date(checkIn));
   }
 
-  async function bookThisPlace() {
-    if (user && place.owner.toString() === user._id.toString()) {
-      setShowModal(true); // Show the modal
-      return;
-    }
+ async function bookThisPlace() {
 
-    try {
-      const response = await axios.post('/api/bookings', {
-        checkIn, checkOut, numberOfGuests, name, phone,
-        place: place._id,
-        price: numberOfNights * place.price,
-        email: user.email,
-      });
-      const newBookingId = response.data._id;
-
-      // Redirect to payment page with booking ID
-      navigate(`/payment/${newBookingId}`);
-    } catch (error) {
-      console.error('Error booking the place:', error);
-      setShowModal(true); // Show the modal for booking failure
-    }
+  // User not logged in
+  if (!user) {
+    navigate('/login');
+    return;
   }
+
+  // User trying to book their own property
+  if (place.owner.toString() === user._id.toString()) {
+    setShowModal(true);
+    return;
+  }
+
+  try {
+    const response = await axios.post('/api/bookings', {
+      checkIn,
+      checkOut,
+      numberOfGuests,
+      name,
+      phone,
+      place: place._id,
+      price: numberOfNights * place.price,
+      email: email, // use state value instead of user.email
+    });
+
+    const newBookingId = response.data._id;
+
+    // Redirect to payment page
+    navigate(`/payment/${newBookingId}`);
+
+  } catch (error) {
+    console.error('Error booking the place:', error);
+    setShowModal(true);
+  }
+}
 
   return (
     <div className="bg-white shadow p-4 rounded-2xl">
