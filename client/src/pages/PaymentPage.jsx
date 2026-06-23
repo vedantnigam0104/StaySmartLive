@@ -101,7 +101,7 @@ export default function PaymentPage() {
       email: user.email,
       bookingId,
     });
-
+    setOtp('');
     setTimer(120);
     setCanResend(false);
     setPaymentStatus('A new OTP has been sent to your email');
