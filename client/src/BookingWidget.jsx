@@ -12,7 +12,8 @@ export default function BookingWidget({ place }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(''); // State for user email
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ export default function BookingWidget({ place }) {
 
   // User trying to book their own property
   if (place.owner.toString() === user._id.toString()) {
+    setModalMessage('You cannot book your own property.');
     setShowModal(true);
     return;
   }
@@ -61,6 +63,7 @@ export default function BookingWidget({ place }) {
 
   } catch (error) {
     console.error('Error booking the place:', error);
+    setModalMessage('Something went wrong while creating the booking.');
     setShowModal(true);
   }
 }
@@ -121,7 +124,7 @@ export default function BookingWidget({ place }) {
         onClose={() => setShowModal(false)}
         title="Booking Error"
       >
-        <p>You cannot book your own place. Please choose another property.</p>
+        <p>{modalMessage}</p>
       </Modal>
     </div>
   );
