@@ -127,12 +127,10 @@ export default function BookingWidget({ place }) {
                    onChange={ev => setName(ev.target.value)} />
            <label>Phone number:</label>
            <PhoneInput
-            country={'in'}
-            value={phone}
-            onChange={(phone) => setPhone(phone)}
-            inputStyle={{
-            width: '100%',
-          }}
+          country="in"
+          enableSearch={true}
+          value={phone}
+          onChange={setPhone}
           />
             <label>Email:</label>
             <input type="email"
