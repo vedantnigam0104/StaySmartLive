@@ -15,6 +15,8 @@ export default function PaymentPage() {
   const elements = useElements();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [timer, setTimer] = useState(120);
+  const [canResend, setCanResend] = useState(false);
 
   useEffect(() => {
     if (bookingId) {
@@ -31,6 +33,8 @@ export default function PaymentPage() {
         });
     }
   }, [bookingId]);
+
+  
   
   async function handlePayment() {
     if (!user || !user.email) {
@@ -77,8 +81,9 @@ export default function PaymentPage() {
         setPaymentStatus('Payment failed: ' + result.error.message);
       } else if (result.paymentIntent.status === 'succeeded') {
         setOtpSent(true);
-        setPaymentStatus('please enter the OTP sent to your email');
-
+        setTimer(120);
+        setCanResend(false);
+        setPaymentStatus('Please enter the OTP sent to your email');
         await axios.post('/api/finalize-booking', { bookingId });
       }
 
@@ -87,6 +92,24 @@ export default function PaymentPage() {
       console.error('Error processing payment:', err);
     }
   }
+
+  async function resendOtp() {
+  if (!canResend) return;
+
+  try {
+    await axios.post('/api/resend-otp', {
+      email: user.email,
+      bookingId,
+    });
+
+    setTimer(120);
+    setCanResend(false);
+    setPaymentStatus('A new OTP has been sent to your email');
+  } catch (err) {
+    console.error(err);
+    setPaymentStatus('Failed to resend OTP');
+  }
+}
 
   async function verifyOtp() {
     try {
@@ -148,25 +171,47 @@ export default function PaymentPage() {
             Pay ${amount}
           </button>
 
-          {otpSent && (
-            <div className="mt-4">
-              <label className="block text-gray-700 mb-2" htmlFor="otp">Enter OTP</label>
-              <input
-                type="text"
-                id="otp"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              />
-              <button
-                onClick={verifyOtp}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg mt-4 transition duration-200"
-              >
-                Verify OTP
-              </button>
-            </div>
-          )}
+         {otpSent && (
+  <div className="mt-4">
+    <label className="block text-gray-700 mb-2" htmlFor="otp">
+      Enter OTP
+    </label>
 
+    <input
+      type="text"
+      id="otp"
+      value={otp}
+      onChange={(e) => setOtp(e.target.value)}
+      className="w-full p-2 border border-gray-300 rounded-lg"
+    />
+
+    <button
+      onClick={verifyOtp}
+      className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg mt-4 transition duration-200"
+    >
+      Verify OTP
+    </button>
+
+    <div className="text-center mt-4">
+      <p className="text-sm text-gray-600">
+        Resend OTP in {Math.floor(timer / 60)}:
+        {(timer % 60).toString().padStart(2, "0")}
+      </p>
+
+      <button
+        onClick={resendOtp}
+        disabled={!canResend}
+        className={`mt-2 transition ${
+          canResend
+            ? "text-blue-600 hover:underline cursor-pointer"
+            : "text-gray-400 opacity-50 cursor-not-allowed blur-[1px]"
+        }`}
+      >
+        Resend OTP
+      </button>
+    </div>
+  </div>
+)}
           {paymentStatus && (
             <div className="text-center text-red-500 mt-4">{paymentStatus}</div>
           )}
