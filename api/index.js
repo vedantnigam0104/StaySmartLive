@@ -543,6 +543,46 @@ app.post('/api/verify-otp', async(req, res) => {
     res.status(400).json({ success: false, error: 'Invalid OTP' });
   }
 });
+
+app.post('/api/resend-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email is required',
+      });
+    }
+
+    const otp = otpGenerator.generate(6, {
+      digits: true,
+      upperCase: false,
+      specialChars: false,
+    });
+
+    req.app.locals.otps = req.app.locals.otps || {};
+    req.app.locals.otps[email] = otp;
+
+    await sendOtpEmail(email, otp);
+
+    console.log(`New OTP sent to ${email}: ${otp}`);
+
+    res.json({
+      success: true,
+      message: 'OTP resent successfully',
+    });
+
+  } catch (error) {
+    console.error('Error resending OTP:', error);
+
+    res.status(500).json({
+      success: false,
+      error: 'Failed to resend OTP',
+    });
+  }
+});
+
 async function sendCancellationEmail(to, booking) {
   try {
     const response = await resend.emails.send({
