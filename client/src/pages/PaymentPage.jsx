@@ -216,11 +216,11 @@ export default function PaymentPage() {
       <button
         onClick={resendOtp}
         disabled={!canResend}
-        className={`mt-2 transition ${
-          canResend
-            ? "text-blue-600 hover:underline cursor-pointer"
-            : "text-gray-400 opacity-50 cursor-not-allowed blur-[1px]"
-        }`}
+       className={`mt-2 font-semibold ${
+       canResend
+      ? "text-blue-600 hover:underline cursor-pointer"
+      : "text-red-500 opacity-50 cursor-not-allowed"
+      }`}
       >
         Resend OTP
       </button>
