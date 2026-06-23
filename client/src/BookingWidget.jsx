@@ -32,10 +32,10 @@ export default function BookingWidget({ place }) {
  async function bookThisPlace() {
 
   // User not logged in
-  if (!user) {
-    navigate('/login');
-    return;
-  }
+ if (!user?._id) {
+  navigate('/login');
+  return;
+}
 
   // User trying to book their own property
   if (place.owner.toString() === user._id.toString()) {
