@@ -3,7 +3,9 @@ import { differenceInCalendarDays } from "date-fns";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext.jsx";
-import Modal from "./Modal.jsx"; // Import the Modal component
+import Modal from "./Modal.jsx";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'; 
 
 export default function BookingWidget({ place }) {
   const [checkIn, setCheckIn] = useState('');
@@ -44,6 +46,29 @@ export default function BookingWidget({ place }) {
     return;
   }
 
+  if (!phone || phone.length < 10) {
+    setModalMessage('Please enter a valid phone number.');
+    setShowModal(true);
+    return;
+    }
+    if (!checkIn || !checkOut) {
+  setModalMessage('Please select check-in and check-out dates.');
+  setShowModal(true);
+  return;
+  }
+  if (numberOfNights <= 0) {
+  setModalMessage('Check-out date must be after check-in date.');
+  setShowModal(true);
+  return;
+  }
+
+  if (numberOfGuests < 1) {
+  setModalMessage('Please enter a valid number of guests.');
+  setShowModal(true);
+  return;
+  }
+
+
   try {
     const response = await axios.post('/api/bookings', {
       checkIn,
@@ -55,7 +80,7 @@ export default function BookingWidget({ place }) {
       price: numberOfNights * place.price,
       email: email, // use state value instead of user.email
     });
-
+    
     const newBookingId = response.data._id;
 
     // Redirect to payment page
@@ -100,10 +125,15 @@ export default function BookingWidget({ place }) {
             <input type="text"
                    value={name}
                    onChange={ev => setName(ev.target.value)} />
-            <label>Phone number:</label>
-            <input type="tel"
-                   value={phone}
-                   onChange={ev => setPhone(ev.target.value)} />
+           <label>Phone number:</label>
+           <PhoneInput
+            country={'in'}
+            value={phone}
+            onChange={(phone) => setPhone(phone)}
+            inputStyle={{
+            width: '100%',
+          }}
+          />
             <label>Email:</label>
             <input type="email"
                    value={email}
